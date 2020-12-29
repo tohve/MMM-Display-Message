@@ -72,7 +72,26 @@ Module.register("MMM-Display-Message", {
 	 * notification - the message
 	 * payload - soab content
 	 */
-	socketNotificationReceived: function(notification, payload) {
+	// socketNotificationReceived: function(notification, payload) {
+		// if (notification === "THE_MESSAGE") {
+			// Log.info(this.name + ": Word received!");
+			// this.message = "Hej"; //payload;
+
+			// var div = document.createElement("div");
+			// div.innerHTML = this.message;
+		// }
+		// this.loaded = true;
+		// this.updateDom();
+	// },
+	
+	/* notificationReceived(notification, payload, sender)
+	 * From MMM-ModuleScheduler, initiates update of word
+	 *
+	 * notification - the message
+	 * payload - ignored
+	 * sender - ignored
+	 */
+	notificationReceived: function(notification, payload, sender) {
 		if (notification === "THE_MESSAGE") {
 			Log.info(this.name + ": Word received!");
 			this.message = payload;
@@ -82,21 +101,11 @@ Module.register("MMM-Display-Message", {
 		}
 		this.loaded = true;
 		this.updateDom();
-	},
-	
-	/* notificationReceived(notification, payload, sender)
-	 * From MMM-ModuleScheduler, initiates update of word
-	 *
-	 * notification - the message
-	 * payload - ignored
-	 * sender - ignored
-	 */
-	// notificationReceived: function(notification, payload, sender) {
 		// if (notification === "UPDATE_SAOB") {
 			// Log.info(this.name + " Received UPDATE_SAOB. Payload: ", payload);
 			// this.updateWord();
 		// }
-	// },
+	},
 
 	/* processSAOB(data)
 	 * Uses the received data from saob.se to find todays word.
