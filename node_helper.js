@@ -1,7 +1,7 @@
 'use strict';
 
 /* Magic Mirror
- * Module: MMM-SAOB / node_helper
+ * Module: MMM-Display-Message / node_helper
  *
  * By Tohmas Vennberg
  * MIT Licensed.
@@ -20,10 +20,10 @@ module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if (notification === 'GET_WORD') {
-			console.log(this.name + " order to get word!")
-			self.getData();
-		}
+		// if (notification === 'GET_WORD') {
+			// console.log(this.name + " order to get word!")
+			// self.getData();
+		// }
 	},
 
 	getData: function() {

@@ -1,17 +1,17 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: MMM-SAOB
+ * Module: MMM-Display-Message
  *
  * By Tohmas Vennberg
  * MIT Licensed.
  */
 
-Module.register("MMM-SAOB", {
+Module.register("MMM-Display-Message", {
 	
 	// Default module config.
 	defaults: {
-		title: "Dagens ord från SAOB"
+		title: "Message"
 	},
 
 	getHeader: function() {
@@ -30,7 +30,8 @@ Module.register("MMM-SAOB", {
 	start: function() {
 		Log.info("Starting module: " + this.name);
 		this.loaded = false;
-		this.updateWord();
+		this.message = "No message!";
+		// this.updateWord();
 	},
 
 	// Override dom generator.
@@ -44,12 +45,12 @@ Module.register("MMM-SAOB", {
 			return wrapper;
 		}
 
-		// The word
+		// The message
 		var large = document.createElement("div");
 		large.className = "large light";
 			
 		var word = document.createElement("span");
-		word.innerHTML = this.word;
+		word.innerHTML = this.message;
 
 		large.appendChild(word);
 		wrapper.appendChild(large);
@@ -60,10 +61,10 @@ Module.register("MMM-SAOB", {
 	/* updateWord()
 	 * Causes read of html from saob.se
 	 */
-	updateWord: function() {		
-		Log.info(this.name + ": Getting the Word!")
-		this.sendSocketNotification("GET_WORD", this.config);
-	},
+	// updateWord: function() {		
+		// Log.info(this.name + ": Getting the Word!")
+		// this.sendSocketNotification("GET_WORD", this.config);
+	// },
 
 	/* socketNotificationReceived(notification, payload)
 	 * From node_helper
@@ -72,10 +73,15 @@ Module.register("MMM-SAOB", {
 	 * payload - soab content
 	 */
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === "THE_WORD") {
+		if (notification === "THE_MESSAGE") {
 			Log.info(this.name + ": Word received!");
-			this.processSAOB(payload);
+			this.message = payload;
+
+			var div = document.createElement("div");
+			div.innerHTML = this.message;
 		}
+		this.loaded = true;
+		this.updateDom();
 	},
 	
 	/* notificationReceived(notification, payload, sender)
@@ -85,41 +91,41 @@ Module.register("MMM-SAOB", {
 	 * payload - ignored
 	 * sender - ignored
 	 */
-	notificationReceived: function(notification, payload, sender) {
-		if (notification === "UPDATE_SAOB") {
-			Log.info(this.name + " Received UPDATE_SAOB. Payload: ", payload);
-			this.updateWord();
-		}
-	},
+	// notificationReceived: function(notification, payload, sender) {
+		// if (notification === "UPDATE_SAOB") {
+			// Log.info(this.name + " Received UPDATE_SAOB. Payload: ", payload);
+			// this.updateWord();
+		// }
+	// },
 
 	/* processSAOB(data)
 	 * Uses the received data from saob.se to find todays word.
 	 *
 	 * argument data object - the html page from saob
 	 */
-	processSAOB: function(
-		data
-	) {
-		// Number of lines in webpage
-		var lines = data.split('\n');
-		Log.info(this.name + "Webpage has " + lines.length + " lines.");
+	// processSAOB: function(
+		// data
+	// ) {
+		// // Number of lines in webpage
+		// var lines = data.split('\n');
+		// Log.info(this.name + "Webpage has " + lines.length + " lines.");
 		
-		// Find key "Dagens ord</"
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i].search("Dagens ord</") > 0) {
-				Log.info("Found key on line " + i);
+		// // Find key "Dagens ord</"
+		// for (var i = 0; i < lines.length; i++) {
+			// if (lines[i].search("Dagens ord</") > 0) {
+				// Log.info("Found key on line " + i);
 				
-				// Dagens ord is two lines below the key
-				Log.info(lines[i+2]);
+				// // Dagens ord is two lines below the key
+				// Log.info(lines[i+2]);
 				
-				// Strip line from tags
-				var div = document.createElement("div");
-				div.innerHTML = lines[i+2];
-				this.word = div.textContent;
-				break;
-			}
-		}
-		this.loaded = true;
-		this.updateDom();
-	},
+				// // Strip line from tags
+				// var div = document.createElement("div");
+				// div.innerHTML = lines[i+2];
+				// this.word = div.textContent;
+				// break;
+			// }
+		// }
+		// this.loaded = true;
+		// this.updateDom();
+	// },
 });
