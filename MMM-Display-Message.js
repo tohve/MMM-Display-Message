@@ -8,10 +8,10 @@
  */
 
 Module.register("MMM-Display-Message", {
-	
+
 	// Default module config.
 	defaults: {
-		title: "Message"
+		title: ""
 	},
 
 	getHeader: function() {
@@ -46,15 +46,15 @@ Module.register("MMM-Display-Message", {
 		}
 
 		// The message
-		var large = document.createElement("div");
-		large.className = "large light";
-			
+		var small = document.createElement("div");
+		small.className = "small light";
+
 		var word = document.createElement("span");
 		word.innerHTML = this.message;
 
-		large.appendChild(word);
-		wrapper.appendChild(large);
-		
+		small.appendChild(word);
+		wrapper.appendChild(small);
+
 		return wrapper;
 	},
 
@@ -94,7 +94,7 @@ Module.register("MMM-Display-Message", {
 	notificationReceived: function(notification, payload, sender) {
 		if (notification === "THE_MESSAGE") {
 			Log.info(this.name + ": Word received!");
-			this.message = payload;
+			this.message = payload.msg;
 
 			var div = document.createElement("div");
 			div.innerHTML = this.message;
